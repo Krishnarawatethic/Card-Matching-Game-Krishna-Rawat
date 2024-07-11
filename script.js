@@ -9,6 +9,7 @@ let cards;
 let interval;
 let firstCard = false;
 let secondCard = false;
+let disableDeck = false;  // Add this variable to disable clicking
 
 const items = [
   { name: "bee", image: "bee.png" },
@@ -76,7 +77,7 @@ const matrixGenerator = (cardValues, size = 4) => {
   cards = document.querySelectorAll(".card-container");
   cards.forEach((card) => {
     card.addEventListener("click", () => {
-      if (!card.classList.contains("matched")) {
+      if (!card.classList.contains("flipped") && !card.classList.contains("matched") && !disableDeck) {
         card.classList.add("flipped");
         if (!firstCard) {
           firstCard = card;
@@ -96,12 +97,14 @@ const matrixGenerator = (cardValues, size = 4) => {
               stopGame();
             }
           } else {
+            disableDeck = true;
             let [tempFirst, tempSecond] = [firstCard, secondCard];
             firstCard = false;
             secondCard = false;
             setTimeout(() => {
               tempFirst.classList.remove("flipped");
               tempSecond.classList.remove("flipped");
+              disableDeck = false;
             }, 900);
           }
         }
